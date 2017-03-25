@@ -1,4 +1,7 @@
-# Description
+
+[![Coverity Scan Build Status]](https://scan.coverity.com/projects/12184/badge.svg)](https://scan.coverity.com/projects/righettod-ws-probing-shell)
+
+# WS Probing Shell
 
 Interactive shell in order to probe/analyze a WebSocket endpoint.
 
