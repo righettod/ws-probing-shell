@@ -1,5 +1,5 @@
 
-[![Coverity Scan Build Status]](https://scan.coverity.com/projects/12184/badge.svg)](https://scan.coverity.com/projects/righettod-ws-probing-shell)
+[![Coverity Scan Build Status](https://img.shields.io/coverity/scan/12184.svg)](https://scan.coverity.com/projects/righettod-ws-probing-shell)
 
 # WS Probing Shell
 
