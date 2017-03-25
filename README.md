@@ -52,7 +52,8 @@ disconnect  probe_request_connection_limit  replay
         replay -m /tmp/message.txt -n 20
 
         Parameters:
-        path_to_message_file: Path to the file (text format) containing the message to replay, no space in path.
+        path_to_message_file: Path to the file (text format) containing the message to replay, 
+                              no space in path.
         repetition_count: Number of time that the message must be send
 
 (Cmd)
