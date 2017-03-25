@@ -2,7 +2,7 @@
 
 Interactive shell in order to probe/analyze a WebSocket endpoint.
 
-The project is under developmement and the creation a pip module is planned in order to facilitate the installation/update.
+The project is under developmement and the creation of a pip module is planned in order to facilitate the installation/update.
 
 # Motivation
 
@@ -26,7 +26,7 @@ Run the script:
 python ws_probing_shell.py
  ```
  
-Type the following command to obtains the list of commands and help about them:
+Type the following command to obtains the list of available commands and help about them:
 
 ```
 .:Welcome to the WebSocket probing shell:.
@@ -62,5 +62,5 @@ disconnect  probe_request_connection_limit  replay
 Commands flow is always something like:
 1. **connect** command using the endpoint URL identified with Burp or ZAP for example
 2. Action commands like: **replay**/**fuzz**/...
-3. Analysis command like: **analyze**/**search**/**probe_request_connection_limit**/**probe_request_length_limit**
+3. Analysis command like: **analyze**/**search**/**probe_request_connection_limit**/**probe_request_length_limit**/...
 3. **disconnect** command if you want to target another endpoint or **quit** command if you want to exit the shell
