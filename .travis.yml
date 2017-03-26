@@ -8,6 +8,3 @@ install:
 
 script:
       - python --version
-addons:
-  srcclr:
-      debug: true
