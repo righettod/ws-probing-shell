@@ -9,4 +9,4 @@ install:
       - pip install -r requirements.txt
 
 script:
-      - python --version
+      - python -m py_compile ws_probing_shell.py
