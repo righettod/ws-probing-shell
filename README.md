@@ -1,4 +1,6 @@
 [![Build Status](https://travis-ci.org/righettod/ws-probing-shell.svg?branch=master)](https://travis-ci.org/righettod/ws-probing-shell)
+[![Requirements Status](https://requires.io/github/righettod/ws-probing-shell/requirements.svg?branch=master)](https://requires.io/github/righettod/ws-probing-shell/requirements/?branch=master)
+[![Dependency Status](https://www.versioneye.com/user/projects/58d7820fdcaf9e0045d97311/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/58d7820fdcaf9e0045d97311)
 
 # WS Probing Shell
 
