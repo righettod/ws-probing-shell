@@ -1,6 +1,3 @@
-
-[![Coverity Scan Build Status](https://img.shields.io/coverity/scan/12184.svg)](https://scan.coverity.com/projects/righettod-ws-probing-shell)
-
 [![Build Status](https://travis-ci.org/righettod/ws-probing-shell.svg?branch=master)](https://travis-ci.org/righettod/ws-probing-shell)
 
 # WS Probing Shell
