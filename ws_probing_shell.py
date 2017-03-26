@@ -49,9 +49,9 @@ class WSProbingShell(cmd.Cmd):
 
         Examples:
         connect -t ws://echo.websocket.org
-        connect -t ws://echo.websocket.org -o mysite.com
-        connect -t ws://echo.websocket.org -o mysite.com -e Cookie=xxxx§User=yyyy
-        connect -t ws://echo.websocket.org -o mysite.com -e Cookie=xxxx§User=yyyy -p authentication§session
+        connect -t ws://echo.websocket.org -o http://mysite.com
+        connect -t ws://echo.websocket.org -o http://mysite.com -e Cookie=xxxx§User=yyyy
+        connect -t ws://echo.websocket.org -o http://mysite.com -e Cookie=xxxx§User=yyyy -p authentication§session
 
         Parameters:
         endpoint: WS endpoint URL

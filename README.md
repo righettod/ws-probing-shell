@@ -1,6 +1,8 @@
 
 [![Coverity Scan Build Status](https://img.shields.io/coverity/scan/12184.svg)](https://scan.coverity.com/projects/righettod-ws-probing-shell)
 
+[![Build Status](https://travis-ci.org/righettod/ws-probing-shell.svg?branch=master)](https://travis-ci.org/righettod/ws-probing-shell)
+
 # WS Probing Shell
 
 Interactive shell in order to probe/analyze a WebSocket endpoint.
@@ -17,8 +19,16 @@ Python >= 3.5
 
 # Dependencies
 
+**pipreqs** (installed itself using pip) has been used to generate the **requirements.txt** file using the following command:
+
 ```
-pip install websocket-client colorama termcolor tabulate
+pipreqs .
+```
+
+Use the following command to install the dependencies packages:
+
+```
+pip install -r requirements.txt
 ```
 
 # How to use it?
@@ -64,6 +74,6 @@ disconnect  probe_request_connection_limit  replay
 
 Commands flow is always something like:
 1. **connect** command using the endpoint URL identified with Burp or ZAP for example
-2. Action commands like: **replay**/**fuzz**/...
-3. Analysis command like: **analyze**/**search**/**probe_request_connection_limit**/**probe_request_length_limit**/...
+2. Action commands like: **replay**,**fuzz**...
+3. Analysis command like: **analyze**,**search**,**probe_request_connection_limit**,**probe_request_length_limit**...
 3. **disconnect** command if you want to target another endpoint or **quit** command if you want to exit the shell

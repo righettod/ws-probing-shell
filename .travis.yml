@@ -1,0 +1,27 @@
+language: python
+
+python:
+  - "3.5"
+
+env:
+  global:
+   - secure: "es2pqbjqUZR8wPt/VNsh6iNj96ENISm1/dudR82eryx2yGySCjRUy8hl2yLGtHFvDxLwaiQtl5qFMVuyYFORtw9parnXtlzna3sCJf21Gs3Av3B9v63RIdOHpfMsywug3tMrcwYK+UhIQHt33Q3TjkxdYmsgw7WvrwM1iUBXYnT0dKzfqZdvyoRLAk5xdbhKxNQoevBfsLKpz88Ff7iiwCs2VzK/2s8Cits1FVKdLMCXpLtmLXLySQ88vwEtYVmDjZeGJqBee1BAC2MsMlbhfQndbrDnI3RK31TXBTBtSRbdsOrVRqi4X/hfr/jRP/0S98PJjFQVhLeVPG+RedRNVEbrcdgXdOpbfjiNkwdJ6OLhK9baj7kVbyYmmJQ+D9vU78U2CmHXi06J377S/xMrBXhlTmb+8NTOIDK9GZosHo53Iznj42VeaWu+80fdWF35ChMqCwaWynbCncmJfi8nVuMipJVml2nXsiQtCQOkn7C9T4aB2fTnRGUHyMbDRmd9+LSl3Kn6gEYxbBxxzBqvYmJ1JzfrQAf6L7hDkTaCTdjGnzhdvLxcQ4HBCNQEs+ip1bzEEdGDVm5ZZj18PJmlxnF6W4LlIsc4rmmI4BWqA/Vyxy9wUoRXY6tzwQxlCAQcrN7ZG0vcnLluRU9Yflc6pHcrsOmSpF78SWu5nmxys8A="
+
+before_install:
+      - echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
+
+install:
+      - pip install -r requirements.txt
+
+addons:
+  srcclr:
+    debug:
+      debug: true
+  coverity_scan:
+    project:
+      name: "righettod/ws-probing-shell"
+      description: "Interactive shell in order to probe/analyze a WebSocket endpoint."
+    notification_email: dominique.righetto@gmail.com
+    build_command_prepend: "pip install -r requirements.txt"
+    build_command:   ""
+    branch_pattern: master
