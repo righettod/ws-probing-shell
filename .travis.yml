@@ -23,5 +23,5 @@ addons:
       description: "Interactive shell in order to probe/analyze a WebSocket endpoint."
     notification_email: dominique.righetto@gmail.com
     build_command_prepend: "pip install -r requirements.txt"
-    build_command:   ""
+    build_command: "python --version"
     branch_pattern: master
