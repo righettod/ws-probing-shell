@@ -228,7 +228,7 @@ class WSProbingShell(cmd.Cmd):
                 data_to_print.append([k, exchanges_gathered[k].strip()])
             # Print result
             print(colored("[*] Exchanges aggregated by response time:", "cyan", attrs=[]))
-            print(tabulate(headers=["Delay in seconds", "Exchange ID(s)"], tabular_data=data_to_print))
+            print(tabulate(headers=["Delay in seconds", "Exchange ID(s)"], tabular_data=data_to_print, tablefmt="grid", numalign="right", stralign="right"))
             # 2) We analyze the exchanges response in order to aggregate them for which the reponse is identical (same content)
             # Gather informations
             data_to_print.clear()
@@ -242,7 +242,64 @@ class WSProbingShell(cmd.Cmd):
                 data_to_print.append([k, exchanges_gathered[k].strip()])
             # Print result
             print(colored("[*] Exchanges aggregated with identical response content:", "cyan", attrs=[]))
-            print(tabulate(headers=["Response content digest (sha256 in hex)", "Exchange ID(s)"], tabular_data=data_to_print))
+            print(tabulate(headers=["Response content digest (sha256 in hex)", "Exchange ID(s)"], tabular_data=data_to_print, tablefmt="grid", numalign="right", stralign="right"))
+
+    def do_show(self, line):
+        """
+        Show the details of specified exchanges or all if not exchange id is provided
+
+        ID start at zero
+
+        Syntax:
+        show
+        show -e [exchange_id_1] [exchange_id_x]
+
+        Examples:
+        show
+        show -e 0
+        show -e 0 1 2
+
+        Parameters:
+        exchange_id_x: Exchange identifier (number)
+        """
+        try:
+            # Define parser for command line arguments
+            parser = argparse.ArgumentParser()
+            parser.add_argument('-e', action="store", dest="exchange_ids", nargs="+", default=[])
+            if len(self.__exchanges) == 0:
+                print(colored("[!] No exchanges available !", "yellow", attrs=[]))
+            else:
+                # Parse command line
+                args = None
+                if "-e" in line:
+                    args = parser.parse_args(line.split(" "))
+                # Build the list of exchange ids to display
+                if args is None or args.exchange_ids is None or len(args.exchange_ids) == 0:
+                    ids = sorted(self.__exchanges.keys())
+                else:
+                    ids = args.exchange_ids
+                # Build the list of data to print
+                data_to_print = []
+                for eid in ids:
+                    eid_int = int(eid)
+                    if eid_int not in self.__exchanges:
+                        print(colored("[!] Exchange ID %s do not exists !" % eid, "yellow", attrs=[]))
+                        continue
+                    exchange = self.__exchanges[int(eid)]
+                    # Add infos for REQUEST
+                    fields = [eid, "REQUEST", "-", "-", exchange["REQUEST_LENGTH"], exchange["REQUEST"]]
+                    data_to_print.append(fields)
+                    # Add infos for RESPONSE
+                    if exchange["IS_ERROR"]:
+                        error_occur = "Yes"
+                    else:
+                        error_occur = "No"
+                    fields = [eid, "RESPONSE", error_occur, exchange["RESPONSE_TIME"], exchange["RESPONSE_LENGTH"], exchange["RESPONSE"]]
+                    data_to_print.append(fields)
+                # Print result
+                print(tabulate(headers=["Exchange ID", "Message type", "Error occur?", "Response delay in seconds", "Length", "Content"], tabular_data=data_to_print, tablefmt="grid", numalign="right", stralign="right"))
+        except Exception as error:
+            print(colored("[!] Show failed: %s" % error, "red", attrs=[]))
 
     def do_search(self, line):
         """
@@ -297,7 +354,7 @@ class WSProbingShell(cmd.Cmd):
                     for word in found:
                         data_to_print.append([word, found[word].strip()])
                     print(colored("[*] Words founds:", "cyan", attrs=[]))
-                    print(tabulate(headers=["Word", "Exchange ID(s)"], tabular_data=data_to_print))
+                    print(tabulate(headers=["Word", "Exchange ID(s)"], tabular_data=data_to_print, tablefmt="grid", numalign="right", stralign="right"))
         except Exception as error:
             print(colored("[!] Search failed: %s" % error, "red", attrs=[]))
 
