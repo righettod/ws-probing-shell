@@ -134,7 +134,7 @@ class WSProbingShell(cmd.Cmd):
                 self.__exchanges.clear()
                 self.__send_messages(messages_list)
                 # Save exchanges data to a local file
-                filename = "exchanges-replay.json"
+                filename = "exchanges_replay.json"
                 print(colored("[*] Exchanges saved to file '%s'." % filename, "cyan", attrs=[]))
                 self.__store_exchanges_to_file(filename)
                 print(colored("[*] Use commands 'analyze' or 'search' to run a analysis on the exchanges data in order to spot interesting elements.", "cyan", attrs=[]))
@@ -194,7 +194,7 @@ class WSProbingShell(cmd.Cmd):
                 self.__exchanges.clear()
                 self.__send_messages(messages_list)
                 # Save exchanges data to a local file
-                filename = "exchanges-fuzzing.json"
+                filename = "exchanges_fuzzing.json"
                 print(colored("[*] Exchanges saved to file '%s'." % filename, "cyan", attrs=[]))
                 self.__store_exchanges_to_file(filename)
                 print(colored("[*] Use commands 'analyze' or 'search' to run a analysis on the exchanges data in order to spot interesting elements.", "cyan", attrs=[]))
@@ -349,6 +349,10 @@ class WSProbingShell(cmd.Cmd):
                                 if word not in found:
                                     found[word] = ""
                                 found[word] += " " + str(idx)
+                    # Save exchanges search to a local file
+                    filename = "exchanges_searching.json"
+                    print(colored("[*] Exchanges search saved to file '%s'." % filename, "cyan", attrs=[]))
+                    self.__store_data_to_file(found, filename)
                     # Print result
                     data_to_print = []
                     for word in found:
@@ -480,6 +484,17 @@ class WSProbingShell(cmd.Cmd):
         :param filename: Destination file
         """
         formatted_data = json.dumps(self.__exchanges, sort_keys=True, indent=2)
+        with open(filename, "w") as ex_file:
+            ex_file.write(formatted_data)
+
+    def __store_data_to_file(self, data, filename):
+        """
+        Save the provided data to a JSON pretty printed string in a text file
+
+        :param data: Data to save
+        :param filename: Destination file
+        """
+        formatted_data = json.dumps(data, sort_keys=True, indent=2)
         with open(filename, "w") as ex_file:
             ex_file.write(formatted_data)
 

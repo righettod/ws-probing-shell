@@ -9,9 +9,8 @@ python:
   - "nightly" # currently points to 3.7-dev
 
 install:
-      - pip install pipreqs
-      - pipreqs --force .
       - pip install -r requirements.txt
 
 script:
       - python -m py_compile ws_probing_shell.py
+      - python -m unittest ws_probing_shell_tests.py
