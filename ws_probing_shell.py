@@ -572,6 +572,7 @@ class WSProbingShell(cmd.Cmd):
 
 
 if __name__ == "__main__":
-    intro = ".:Welcome to the WebSocket probing shell:.\n\nType help or ? to list commands.\n"
+    version = "1.0.0.dev"
+    intro = ".:Welcome to the WebSocket probing shell:.\n\nVersion %s\n\nType help or ? to list commands.\n" % version
     colorama.init()
     WSProbingShell().cmdloop(intro)

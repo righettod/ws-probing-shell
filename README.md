@@ -10,19 +10,13 @@ The project is under developmement and the creation of a pip module is planned i
 
 # Motivation
 
-This shell was developed because I didn't find a tool or a extension in Burp/OWASP Zap allowing me to deeply inspect and probe a WebSocket endpoint in the same way that I can do it for a web endpoint like a REST web service for example.
+This shell was developed because I didn't find a tool or a extension in Burp/OWASP Zap allowing me to deeply inspect and probe a WebSocket endpoint in the same way that I can do it for example for a web endpoint like a REST web service.
 
 # Python version requirement 
 
 Python >= 3.5
 
 # Dependencies
-
-**pipreqs** (installed itself using pip) has been used to generate the **requirements.txt** file using the following command:
-
-```
-pipreqs .
-```
 
 Use the following command to install the dependencies packages:
 
