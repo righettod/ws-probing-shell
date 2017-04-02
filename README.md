@@ -66,8 +66,23 @@ fuzz        probe_request_length_limit           show
 (Cmd)
 ```
 
-Commands flow is always something like:
-1. **connect** command using the endpoint URL identified with Burp or ZAP for example
-2. _Action_ commands like: **replay**,**fuzz**, **probe_request_connection_limit**,**probe_request_length_limit**,**probe_connection_channels_supported**...
-3. _Analysis_ command like: **analyze**,**search**, **show**...
-3. **disconnect** command if you want to target another endpoint or **quit** command if you want to exit the shell
+# Commands flow
+
+Use of the shell is always something like this:
+
+1. **connect** command using the targeted endpoint (`WS://xxx` or `WSS://xxx`) identified for example with Burp or ZAP.
+2. _Action_ command (1 or N times) like: 
+    * **replay**,
+    * **fuzz**,
+    * **probe_request_connection_limit**,
+    * **probe_request_length_limit**,
+    * **probe_connection_channels_supported**,
+    * ...
+3. _Analysis_ command (1 or N times) like: 
+    * **analyze**,
+    * **search**,
+    * **show**,
+    * ...
+3. Finalization command like:
+    * **disconnect** command if you want to target another endpoint,
+    * **quit** command if you want to exit the shell.
