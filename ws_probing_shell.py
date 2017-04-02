@@ -1,9 +1,8 @@
 #!/usr/bin/env python
-# ==============================================================================
-# Interactive shell in order to probe/analyze a WebSocket endpoint
-# Dependencies:
-#   pip install websocket-client colorama termcolor tabulate
-# ==============================================================================
+"""
+    Interactive shell in order to probe/analyze a WebSocket endpoint
+"""
+
 import time
 import cmd
 import argparse
@@ -21,6 +20,9 @@ from tabulate import tabulate
 
 
 class WSProbingShell(cmd.Cmd):
+    """
+    Interactive shell in order to probe/analyze a WebSocket endpoint
+    """
     def __init__(self):
         """
         Constructor
@@ -393,6 +395,62 @@ class WSProbingShell(cmd.Cmd):
         except Exception as error:
             print(colored("[!] Probing failed: %s" % error, "red", attrs=[]))
 
+    def do_probe_connection_channels_supported(self, line):
+        """
+        Probe the WS server in order to determine if it support the secure or insecure channel connection using the following behavior:
+        
+        => If the initial connection was made with WSS secure protocol then the command will test the support for connection using WS insecure protocol
+        
+        => If the initial connection was made with WS insecure protocol then the command will test the support for connection using WSS secure protocol
+
+        Note: Perform a initial connection using the "connect" command before to use this command in order to allow
+        this command to know the connection context to use.     
+        """
+        try:
+            # Check if connection context is defined
+            if self.__client_connection_parameters is None:
+                print(colored("[!] Perform a initial connection using the 'connect' command !", "yellow", attrs=[]))
+            else:
+                # Define parser for command line arguments stored in the connection context (same like for "connect" command)
+                parser = argparse.ArgumentParser()
+                parser.add_argument('-t', action="store", dest="endpoint")
+                parser.add_argument('-o', action="store", dest="origin", default=None)
+                parser.add_argument('-e', action="store", dest="extra_http_headers", default=None)
+                parser.add_argument('-p', action="store", dest="subprotocols", default=None)
+                # Parse command line stored in the connection context (same like for "connect" command)
+                args = parser.parse_args(self.__client_connection_parameters.split(" "))
+                # Build custom headers map
+                extra_headers = {}
+                if args.extra_http_headers is not None:
+                    for pair in args.extra_http_headers.split("§"):
+                        parts = pair.split("=")
+                        extra_headers[parts[0]] = parts[1]
+                # Build subprotocols list
+                subprotocols_set = []
+                if args.subprotocols is not None:
+                    for subprotocol in args.subprotocols.split("§"):
+                        subprotocols_set.append(subprotocol)
+                # Perform probing
+                target_endpoint = args.endpoint.lower()
+                msg_prefix = "Secure"
+                protocol_to_test = "wss://"
+                if target_endpoint.startswith("wss://"):
+                    msg_prefix = "Insecure"
+                    protocol_to_test = "ws://"
+                target_endpoint = protocol_to_test + target_endpoint.replace("wss://", "").replace("ws://", "")
+                print(colored("[*] Test if WS server support '%s' %s protocol..." % (protocol_to_test, msg_prefix.lower()), "cyan", attrs=[]))
+                try:
+                    test_connection = create_connection(url=target_endpoint, timeout=10, header=extra_headers, origin=args.origin, subprotocols=subprotocols_set)
+                    test_connection.send("hello")
+                    if test_connection.recv() is not None:
+                        print(colored("[*]    %s protocol '%s' supported." % (msg_prefix, protocol_to_test), "cyan", attrs=[]))
+                    else:
+                        print(colored("[*]    %s protocol '%s' not supported (no response to message sent)." % (msg_prefix, protocol_to_test), "cyan", attrs=[]))
+                except (WebSocketException, IOError) as e:
+                    print(colored("[*]    %s protocol '%s' not supported (error: '%s')." % (msg_prefix, protocol_to_test, e), "cyan", attrs=[]))
+        except Exception as error:
+            print(colored("[!] Probing failed: %s" % error, "red", attrs=[]))
+
     def do_probe_request_connection_limit(self, line):
         """
         Probe the WS server in order to determine the maximum number of connection allowed from a client.
@@ -453,7 +511,6 @@ class WSProbingShell(cmd.Cmd):
                         connection.close()
                     except IOError:
                         connection_not_released_count += 1
-                        pass
                 print(colored("[*] Connections released (%s connections released | %s connections not released due to error)." % (len(connections_references_list) - connection_not_released_count, connection_not_released_count), "cyan", attrs=[]))
         except Exception as error:
             print(colored("[!] Probing failed: %s" % error, "red", attrs=[]))

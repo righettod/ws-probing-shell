@@ -43,9 +43,10 @@ Type help or ? to list commands.
 
 Documented commands (type help <topic>):
 ========================================
-analyze     fuzz                            probe_request_length_limit  search
-connect     help                            quit                        show
-disconnect  probe_request_connection_limit  replay
+analyze     help                                 quit
+connect     probe_connection_channels_supported  replay
+disconnect  probe_request_connection_limit       search
+fuzz        probe_request_length_limit           show
 
 (Cmd) help replay
 
@@ -67,6 +68,6 @@ disconnect  probe_request_connection_limit  replay
 
 Commands flow is always something like:
 1. **connect** command using the endpoint URL identified with Burp or ZAP for example
-2. _Action_ commands like: **replay**,**fuzz**, **probe_request_connection_limit**,**probe_request_length_limit**...
+2. _Action_ commands like: **replay**,**fuzz**, **probe_request_connection_limit**,**probe_request_length_limit**,**probe_connection_channels_supported**...
 3. _Analysis_ command like: **analyze**,**search**, **show**...
 3. **disconnect** command if you want to target another endpoint or **quit** command if you want to exit the shell
