@@ -43,10 +43,10 @@ Type help or ? to list commands.
 
 Documented commands (type help <topic>):
 ========================================
-analyze     help                                 quit
+analyze     help                                 quit    show
 connect     probe_connection_channels_supported  replay
-disconnect  probe_request_connection_limit       search
-fuzz        probe_request_length_limit           show
+disconnect  probe_request_connection_limit       scan
+fuzz        probe_request_length_limit           search
 
 (Cmd) help replay
 
@@ -77,6 +77,7 @@ Use of the shell is always something like this:
     * **probe_request_connection_limit**,
     * **probe_request_length_limit**,
     * **probe_connection_channels_supported**,
+    * **scan**,
     * ...
 3. _Analysis_ command (1 or N times) like: 
     * **analyze**,

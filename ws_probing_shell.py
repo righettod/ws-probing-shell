@@ -303,6 +303,63 @@ class WSProbingShell(cmd.Cmd):
         except Exception as error:
             print(colored("[!] Show failed: %s" % error, "red", attrs=[]))
 
+    def do_scan(self, line):
+        """
+        Scan a domain name using provided ports range or set in order to detect any WebSocket endpoint exposure
+        
+        Syntax:
+        scan -t [domain] -p [ports_range_or_set] -u [uri]
+
+        Examples:
+        scan -t dvws.local -p 8000-9000
+        scan -t dvws.local -p 8080,8089,9096
+        scan -t dvws.local -p 8999
+        scan -t dvws.local -p 8000-9000 -u /authenticate-user
+        scan -t dvws.local -p 8080,8089,9096 -u /authenticate-user
+        scan -t dvws.local -p 8999 -u /authenticate-user
+        
+        Parameters:
+        domain: Domain name to scan for WebSocket endpoint exposure
+        ports_range_or_set: List of ports to scan in "range" format (using START_PORT-END_PORT expression) or in "set" format (using PORT1,PORT2,PORTx expression).  
+        uri: URI to append to domain name if needed. Can be used for example if you know a site but you want to check if some WebSocket endpoint are exposed. 
+        """
+        try:
+            # Define parser for command line arguments
+            parser = argparse.ArgumentParser()
+            parser.add_argument('-t', action="store", dest="domain")
+            parser.add_argument('-p', action="store", dest="ports")
+            parser.add_argument('-u', action="store", dest="uri", default="")
+            # Handle empty argument and mandatory arguments case
+            if line.strip() == "" or "-t" not in line or "-p" not in line:
+                print(colored("[!] Missing parameters !", "yellow", attrs=[]))
+            else:
+                # Parse command line
+                args = parser.parse_args(line.split(" "))
+                # Extract the list of ports to scan
+                if "," in args.ports:
+                    ports_to_scan = args.ports.split(",")
+                elif "-" in args.ports:
+                    parts = args.ports.strip().split("-")
+                    start = int(parts[0])
+                    end = int(parts[1])
+                    ports_to_scan = range(start, end, 1)
+                else:
+                    ports_to_scan = [args.ports]
+                # Perform scan
+                print(colored("[*] Start scanning of %s ports..." % len(ports_to_scan), "cyan", attrs=[]))
+                protocols = ["ws://", "wss://"]
+                for port in ports_to_scan:
+                    for protocol in protocols:
+                        try:
+                            target = protocol + args.domain + ":" + str(port) + args.uri
+                            test_connection = create_connection(url=target, timeout=3)
+                            print(colored("[*]    Port %s is available using protocol '%s'." % (port, protocol), "cyan", attrs=[]))
+                            test_connection.close()
+                        except (WebSocketException, IOError):
+                            pass
+        except Exception as error:
+            print(colored("[!] Scan failed: %s" % error, "red", attrs=[]))
+
     def do_search(self, line):
         """
         Search for the presence of one or several words in exchanges responses
