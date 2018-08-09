@@ -86,17 +86,17 @@ class WSProbingShell(cmd.Cmd):
                     for subprotocol in args.subprotocols.split("§"):
                         subprotocols_set.append(subprotocol)
                 # Connect to endpoint and send a message to validate the connection
-                print(colored("[*] Connecting...", "cyan", attrs=[]))
+                print(colored("[*]    Connecting...", "cyan", attrs=[]))
                 self.__client = create_connection(url=args.endpoint, timeout=10, header=extra_headers, origin=args.origin, subprotocols=subprotocols_set)
                 self.__client.send("hello")
                 if self.__client.recv() is not None:
                     # Save connection parameters in order to reopen connection later in case of need
                     self.__client_connection_parameters = line
-                    print(colored("[*] Connected.", "cyan", attrs=[]))
+                    print(colored("[*]    Connected.", "cyan", attrs=[]))
                 else:
-                    print(colored("[!] Connection state cannot be confirmed !", "yellow", attrs=[]))
+                    print(colored("[!]    Connection state cannot be confirmed !", "yellow", attrs=[]))
         except Exception as error:
-            print(colored("[!] Connection failed: %s" % error, "red", attrs=[]))
+            print(colored("[!]    Connection failed: %s" % error, "red", attrs=[]))
 
     def do_replay(self, line):
         """
@@ -625,6 +625,7 @@ class WSProbingShell(cmd.Cmd):
         for msg in messages_list:
             start = time.clock()
             try:
+                self.__check_connection_availability()
                 self.__client.send(msg)
                 response = self.__client.recv()
                 self.__exchanges[idx] = {"REQUEST": msg, "RESPONSE": response, "IS_ERROR": False}
@@ -652,8 +653,7 @@ class WSProbingShell(cmd.Cmd):
                 if self.__client.recv() is not None:
                     print(colored("[*] Connection is available.", "cyan", attrs=[]))
             except WebSocketConnectionClosedException as wse:
-                if "Connection is already closed" in str(wse):
-                    self.do_connect(self.__client_connection_parameters)
+                self.do_connect(self.__client_connection_parameters)
 
     def __build_fuzzing_dicts(self, payload_files_list, payload_combinations, current_position):
         """
